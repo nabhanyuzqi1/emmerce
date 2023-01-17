@@ -43,11 +43,11 @@
               <tbody>
               <% product.forEach((item, index) => { %>
                <tr>
-                <td><a href="productdetails?id=<%= item._id %>"><%- ++index %>.    <%- item.name %></a></td>
+                <td><a href="productdetails?id=<%= item._id %>"><%- ++index %>.<%- item.name %></a></td>
                 <!-- <td></td> -->
                 <td>
                   <a href="updateproduct?id=<%= item._id %>"><button class="btn btn-success">Update</button></a>
-                  <a href="deleteanjay?id=<%= item._id %>"><button class="btn btn-warning">Delete</button></a>
+                  <a href="deleteproduct?id=<%= item._id %>"><button class="btn btn-warning">Delete</button></a>
                 </td>
               </tr>
               <% }) %>
