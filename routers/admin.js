@@ -67,7 +67,7 @@ router.post(`/category`, isAuth, async (req, res) => {
 	res.redirect("/admin/category");
 });
 
-router.get(`/addproduct`, isAuth, async (req, res) => {
+router.post(`/addproduct`, isAuth, async (req, res) => {
 	const category = await Category.find().select("name");
 
 	res.render("admin/addproduct", { category: category });
@@ -108,6 +108,32 @@ router.get("/productdetails", isAuth, async (req, res) => {
 		product: product,
 	});
 });
+
+
+
+router.get(`/deleteanjay/:id`, isAuth, async (req, res, next) => {
+	if (!mongoose.isValidObjectId(req.params.id)) {
+		return res.status(400).send("Invalid product id");
+	}
+
+	const product =  await Product.find();
+	try {
+		product =  await Product.findByIdAndRemove(req.params.id);
+
+		if (product) {
+			fileHelper.deleteFile(`public/${product.image}`);
+			return res.status(200).redirect("/admin/product");
+		} else {
+			return res
+				.status(404)
+				.json({ success: false, message: "The product not found" });
+		}
+	} catch (err) {
+		return res.status(400).json({ success: false, error: err });
+	}
+});
+
+
 
 router.get("/updateproduct", isAuth, async (req, res) => {
 	const product = await Product.findOne({ _id: req.query.id }).populate(
@@ -157,26 +183,9 @@ router.post(
 			}
 		);
 
-		res.redirect("/admin/viewproduct");
+		res.redirect("/admin/product");
 	}
 );
-
-router.get("/deleteproduct/:id", isAuth, async (req, res) => {
-	try {
-		product = await Product.findByIdAndRemove(req.params.id);
-
-		if (product) {
-			fileHelper.deleteFile(`public/${product.image}`);
-			return res.status(200).redirect("/admin/viewproduct");
-		} else {
-			return res
-				.status(404)
-				.json({ success: false, message: "The product not found" });
-		}
-	} catch (err) {
-		return res.status(400).json({ success: false, error: err });
-	}
-});
 
 router.get(`/mailbox`, isAuth, async (req, res) => {
 	const contact = await Contact.find();

@@ -24,27 +24,6 @@ router.get(`/`, async (req, res) => {
 	});
 });
 
-router.get(`/blog`, async (req, res) => {
-	const category = await Category.find().select("name");
-
-	res.render("blog", {
-		cart: req.session.cart,
-		sessionId: req.session._id,
-		anAdmin: req.session.anAdmin,
-		category: category,
-	});
-});
-
-router.get(`/blogdetail`, async (req, res) => {
-	const category = await Category.find().select("name");
-
-	res.render("blogdetail", {
-		cart: req.session.cart,
-		sessionId: req.session._id,
-		anAdmin: req.session.anAdmin,
-		category: category,
-	});
-});
 
 router.get(`/about`, async (req, res) => {
 	const category = await Category.find().select("name");
@@ -55,32 +34,6 @@ router.get(`/about`, async (req, res) => {
 		anAdmin: req.session.anAdmin,
 		category: category,
 	});
-});
-
-router.get(`/contact`, async (req, res) => {
-	const category = await Category.find().select("name");
-
-	res.render("contact", {
-		cart: req.session.cart,
-		sessionId: req.session._id,
-		anAdmin: req.session.anAdmin,
-		category: category,
-	});
-});
-
-router.post(`/contact`, async (req, res) => {
-	let contactMsg = new Contact({
-		username: req.body.username,
-		email: req.body.email,
-		subject: req.body.subject,
-		message: req.body.message,
-	});
-
-	contactMsg = await contactMsg.save();
-
-	if (!contactMsg) res.status(500).send("The contact message was not saved");
-
-	res.redirect("/contact");
 });
 
 router.get(`/product`, async (req, res) => {
